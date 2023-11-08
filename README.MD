@@ -1,0 +1,1 @@
+https://github.com/AleksK1NG/Go-NATS-Streaming-gRPC-PostgreSQL/blob/master/internal/email/delivery/http/v1/handlers.go
