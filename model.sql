@@ -5,7 +5,10 @@ CREATE TABLE Promotions (
                             EndDate DATE,
                             DiscountType ENUM('Percentage', 'FixedValue'),
                             DiscountValue DECIMAL(10, 2),
-                            CompanyCode VARCHAR(20)
+                            CompanyCode VARCHAR(20),
+                            Status VARCHAR(12) CHECK
+                                (CASE WHEN EXTRACT(EPOCH FROM StartDate) > EXTRACT(EPOCH FROM CURRENT_TIMESTAMP) THEN 'active'  END IN ('active', 'inactive'))
+
 );
 
 
@@ -17,3 +20,8 @@ CREATE TABLE PromotionUsage (
                                 UsageDate TIMESTAMP,
                                 FOREIGN KEY (PromotionCode) REFERENCES Promotions(PromotionCode),
 );
+
+
+start_time TIMESTAMP,
+                            status VARCHAR(12) CHECK
+                                (CASE WHEN EXTRACT(EPOCH FROM StartDate) < EXTRACT(EPOCH FROM CURRENT_TIMESTAMP) THEN 'inactive' ELSE 'active' END IN ('active', 'inactive'))
