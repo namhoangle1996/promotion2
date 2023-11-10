@@ -18,10 +18,11 @@ func NewConn(postgresql config.Postgresql) *gorm.DB {
 	sslMode := postgresql.PostgresqlSSLMode
 
 	dbURL := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=%v TimeZone=Asia/Ho_Chi_Minh", host, user, pw, dbName, port, sslMode)
-	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{DryRun: true, PrepareStmt: true})
 
 	if err != nil {
 		log.Fatalln(err)
+		return nil
 	}
 
 	err = db.AutoMigrate(&model.Promotion{}, &model.PromotionUsage{})

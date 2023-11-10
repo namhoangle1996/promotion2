@@ -14,7 +14,8 @@ type Config struct {
 }
 
 type Kafka struct {
-	BoostrapServer string
+	BoostrapServers string
+	GroupId         string
 }
 
 type Redis struct {

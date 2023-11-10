@@ -5,8 +5,8 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 	"kk/config"
-	"kk/internal/infrastructure/postgresql"
 	"kk/internal/repositories/repositoriesImplement"
 	"kk/internal/usecase/usecaseImple"
 	"log"
@@ -17,22 +17,27 @@ import (
 	"time"
 )
 
-func NewHttpHandler(httpConfig config.HTTP) {
+func NewHttpServer(httpConfig config.HTTP, db *gorm.DB) {
 	router := gin.Default()
-	router.Group("/api/v1")
 
 	srv := &http.Server{
-		Addr:    httpConfig.Port,
-		Handler: router,
+		Addr:         httpConfig.Port,
+		Handler:      router,
+		ReadTimeout:  httpConfig.ReadTimeout,
+		WriteTimeout: httpConfig.WriteTimeout,
 	}
 
 	validate := validator.New()
 
-	db := postgresql.NewConn(config.Postgresql{})
-	repo := repositoriesImplement.NewPromotionRepo(db)
-	usecase := usecaseImple.NewPromotionUsecase(repo)
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "OK"})
+	})
 
-	_ = newPromotionHandler(router.Group("/promotion"), usecase, validate)
+	repo := repositoriesImplement.NewPromotionRepo(db)
+	promotionUsecase := usecaseImple.NewPromotionUsecase(repo)
+
+	_ = newPromotionHandler(router.Group("/promotion"), promotionUsecase, validate)
+	//_ = newPromotionHandler(router.Group("/account"), promotionUsecase, validate)
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {

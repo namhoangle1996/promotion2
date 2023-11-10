@@ -4,9 +4,9 @@ import "time"
 
 type PromotionUsage struct {
 	BaseModel
-	PromotionCode string    `json:"promotionCode" gorm:"column:promotionCode"`
+	PromotionId   string    `json:"promotionId" gorm:"column:promotionId;not null"`
 	CustomerID    int       `json:"customerID" gorm:"column:customerID"`
-	TransactionID int       `json:"transactionID" gorm:"column:transactionID"`
+	TransactionID int       `json:"transactionID" gorm:"column:transactionID;not null"`
 	UsageDate     time.Time `json:"usageDate;default:CURRENT_TIMESTAMP" gorm:"column:usageDate"`
 }
 
