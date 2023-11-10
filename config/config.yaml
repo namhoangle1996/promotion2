@@ -2,7 +2,7 @@ AppVersion: dev.1.0.0
 
 
 Kafka:
-  Addr: ""
+  BoostrapServer: ""
 
 HTTP:
   Port: ":8888"

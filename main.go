@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"kk/config"
+	"kk/internal/infrastructure/redis"
 )
 
 func main() {
 	conf := config.NewConfig()
 
-	fmt.Println(conf)
-	return
+	_ = redis.NewRedisConn(conf.Redis)
+
+	select {}
 }

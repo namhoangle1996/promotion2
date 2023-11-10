@@ -14,9 +14,17 @@ type Config struct {
 }
 
 type Kafka struct {
+	BoostrapServer string
 }
 
 type Redis struct {
+	RedisAddr      string
+	RedisPassword  string
+	RedisDefaultDB int
+	MinIdleConn    int
+	PoolSize       int
+	PoolTimeout    time.Duration
+	DB             int
 }
 
 type HTTP struct {
@@ -47,6 +55,11 @@ func NewConfig() (conf Config) {
 	if err != nil {
 		panic(err)
 	}
+
+	//viper.WatchConfig()
+	//viper.OnConfigChange(func(e fsnotify.Event) {
+	//	fmt.Println("Config file changed:", e.Name)
+	//})
 
 	err = viper.Unmarshal(&conf)
 
